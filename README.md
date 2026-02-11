@@ -50,6 +50,113 @@ cd ddmcp
 uv sync
 ```
 
+### Docker Deployment (Recommended for Teams)
+
+Run `ddmcp` as a persistent Docker container that multiple Claude clients can connect to over the network.
+
+**Benefits:**
+- Single server instance shared across your team
+- Persistent uptime - no need to restart on each use
+- Network accessible from any machine
+- Consistent environment with locked dependencies
+
+#### Quick Start with Docker Compose
+
+1. **Set up environment variables:**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your DD_API_KEY and DD_APP_KEY
+   ```
+
+2. **Start the container:**
+   ```bash
+   docker-compose up -d
+   ```
+
+   The server will start on `http://localhost:8888` with a health check endpoint at `/health`.
+
+3. **Configure your Claude clients:**
+
+   **For Claude Code (CLI):**
+   ```bash
+   # Copy the stdio config
+   cp client-configs/claude-code-http.json ~/.claude/mcp.json
+   ```
+
+   This uses `docker exec` for clean stdio transport:
+   ```json
+   {
+     "mcpServers": {
+       "ddmcp": {
+         "command": "docker",
+         "args": ["exec", "-i", "ddmcp-server", "/app/.venv/bin/python", "-m", "ddmcp.server"],
+         "env": {}
+       }
+     }
+   }
+   ```
+
+   **For Claude Desktop (HTTP):**
+
+   MacOS:
+   ```bash
+   cp client-configs/claude-desktop-http.json ~/Library/Application\ Support/Claude/claude_desktop_config.json
+   ```
+
+   Windows:
+   ```powershell
+   Copy-Item client-configs\claude-desktop-http.json "$env:APPDATA\Claude\claude_desktop_config.json"
+   ```
+
+   Linux:
+   ```bash
+   cp client-configs/claude-desktop-http.json ~/.config/Claude/claude_desktop_config.json
+   ```
+
+   This uses HTTP/SSE transport:
+   ```json
+   {
+     "mcpServers": {
+       "ddmcp": {
+         "url": "http://localhost:8888/mcp",
+         "transport": "sse"
+       }
+     }
+   }
+   ```
+
+4. **Restart your Claude client** and verify the tools are available.
+
+#### Managing the Container
+
+```bash
+# View logs
+docker-compose logs -f ddmcp
+
+# Restart
+docker-compose restart ddmcp
+
+# Stop
+docker-compose down
+
+# Rebuild after code changes
+docker-compose down && docker-compose build && docker-compose up -d
+
+# Check health
+curl http://localhost:8888/health
+```
+
+#### Network Access
+
+The Docker setup exposes port 8888 by default. For detailed network configuration including:
+- Accessing from other machines on your network
+- Firewall setup
+- Remote access configuration
+
+See [DOCKER-NETWORK-SETUP.md](DOCKER-NETWORK-SETUP.md) for complete instructions.
+
+For alternative deployment methods (systemd, launchd, Windows service), see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ## Configuration
 
 `ddmcp` requires Datadog API credentials and optionally accepts a site configuration.
