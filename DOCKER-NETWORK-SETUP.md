@@ -37,8 +37,8 @@ cd /Users/danielhostetler/src/ddmcp
 
 # Create .env file
 cat > .env << 'EOF'
-DD_API_KEY=989494cf6e61d776c8d3611f8d13e2d4
-DD_APP_KEY=a6d6b84d78f84b61a6fb76b0bf5e09cb4b0f4c01
+DD_API_KEY=xxx
+DD_APP_KEY=xxx
 DD_SITE=us5
 EOF
 
