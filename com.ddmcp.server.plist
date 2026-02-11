@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.ddmcp.server</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/uv</string>
+        <string>run</string>
+        <string>python</string>
+        <string>-m</string>
+        <string>ddmcp.server</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/danielhostetler/src/ddmcp</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>DD_API_KEY</key>
+        <string>your-api-key-here</string>
+        <key>DD_APP_KEY</key>
+        <string>your-app-key-here</string>
+        <key>DD_SITE</key>
+        <string>us5</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/ddmcp.out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/ddmcp.err.log</string>
+</dict>
+</plist>

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  ddmcp:
+    build: .
+    container_name: ddmcp-server
+    restart: unless-stopped
+    environment:
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_APP_KEY=${DD_APP_KEY}
+      - DD_SITE=${DD_SITE:-us5}
+    ports:
+      - "8888:8000"
+    networks:
+      - ddmcp-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  ddmcp-network:
+    driver: bridge

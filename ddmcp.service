@@ -1,0 +1,20 @@
+# Systemd service file for ddmcp
+# Install to: /etc/systemd/system/ddmcp.service (Linux)
+
+[Unit]
+Description=Datadog MCP Server
+After=network.target
+
+[Service]
+Type=simple
+User=danielhostetler
+WorkingDirectory=/Users/danielhostetler/src/ddmcp
+Environment="DD_API_KEY=your-api-key-here"
+Environment="DD_APP_KEY=your-app-key-here"
+Environment="DD_SITE=us5"
+ExecStart=/usr/local/bin/uv run python -m ddmcp.server
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

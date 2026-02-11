@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ddmcp": {
+      "url": "http://localhost:8888/mcp",
+      "transport": "sse"
+    }
+  }
+}
